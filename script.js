@@ -110,4 +110,55 @@
   });
 
   highlightNav();
+
+  /* ==========================================================
+     Newsletter — load posts from posts-data.json
+     ========================================================== */
+  const grid = document.getElementById('newsletterGrid');
+
+  if (grid) {
+    fetch('dist/posts/posts-data.json')
+      .then(res => {
+        if (!res.ok) throw new Error(res.status);
+        return res.json();
+      })
+      .then(posts => {
+        if (!posts.length) return;
+        grid.innerHTML = '';
+        posts.forEach((post, i) => {
+          const tags = (post.tags || [])
+            .map(t => `<span>${t}</span>`)
+            .join('');
+
+          const card = document.createElement('a');
+          card.href = post.url;
+          card.className = 'newsletter-card animate-on-scroll';
+          card.style.transitionDelay = `${i * 0.08}s`;
+          card.innerHTML = `
+            <span class="newsletter-card-date">${post.date}</span>
+            <h3 class="newsletter-card-title">${post.title}</h3>
+            <p class="newsletter-card-summary">${post.summary}</p>
+            <div class="newsletter-card-tags">${tags}</div>
+          `;
+          grid.appendChild(card);
+
+          if ('IntersectionObserver' in window) {
+            const obs = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  obs.unobserve(entry.target);
+                }
+              });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            obs.observe(card);
+          } else {
+            card.classList.add('visible');
+          }
+        });
+      })
+      .catch(() => {
+        /* posts-data.json not found yet — keep the "no posts" message */
+      });
+  }
 })();

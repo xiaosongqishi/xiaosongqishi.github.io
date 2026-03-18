@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}} — Jinsong Liu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+  <style>
+    /* Post-specific styles */
+    .post-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .post-nav-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .post-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s ease;
+    }
+    .post-back:hover { color: var(--accent); }
+    .post-header {
+      padding-top: calc(var(--nav-height) + 60px);
+      padding-bottom: 40px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .post-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--text-tertiary);
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+    }
+    .post-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border-radius: 20px;
+    }
+    .post-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .post-body h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 40px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    .post-body h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 32px 0 12px;
+    }
+    .post-body p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .post-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .post-body a:hover { opacity: 0.8; }
+    .post-body img {
+      max-width: 100%;
+      border-radius: var(--radius);
+      margin: 24px 0;
+      border: 1px solid var(--border);
+    }
+    .post-body ul, .post-body ol {
+      margin: 0 0 20px 24px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .post-body li { margin-bottom: 6px; list-style: disc; }
+    .post-body ol li { list-style: decimal; }
+    .post-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 12px 20px;
+      margin: 20px 0;
+      background: var(--card-glow);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .post-body pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      overflow-x: auto;
+      margin: 20px 0;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .post-body code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+    }
+    .post-body p code, .post-body li code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .post-footer-nav {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      text-align: center;
+    }
+    .post-footer-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
+    .post-footer-nav a:hover { opacity: 0.7; }
+    @media (max-width: 768px) {
+      .post-header { padding-top: calc(var(--nav-height) + 40px); }
+      .post-body { padding: 0 16px 60px; }
+      .post-header { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="post-nav">
+    <div class="post-nav-inner">
+      <a href="../../index.html" class="post-back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back
+      </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <header class="post-header container">
+    <h1>{{TITLE}}</h1>
+    <div class="post-meta">
+      <time>{{DATE}}</time>
+      {{TAGS}}
+    </div>
+  </header>
+
+  <article class="post-body">
+    {{CONTENT}}
+  </article>
+
+  <div class="post-footer-nav">
+    <a href="../../index.html#newsletter">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to all posts
+    </a>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      function getTheme() {
+        const s = localStorage.getItem('theme');
+        if (s) return s;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      function apply(t) { root.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
+      apply(getTheme());
+      toggle.addEventListener('click', () => {
+        apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+      hljs.highlightAll();
+    })();
+  </script>
+</body>
+</html>
