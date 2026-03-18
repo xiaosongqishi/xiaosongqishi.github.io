@@ -1,12 +1,10 @@
-name: Build Posts & Deploy
+name: Build Index & Deploy
 
 on:
   push:
     paths:
       - 'posts/**'
-      - 'build.py'
-      - 'post-template.html'
-      - 'requirements.txt'
+      - 'build_index.py'
       - 'index.html'
       - 'style.css'
       - 'script.js'
@@ -31,16 +29,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Build posts
-        run: python build.py
+      - name: Build posts index
+        run: python3 build_index.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

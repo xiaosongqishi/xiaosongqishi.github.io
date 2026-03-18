@@ -117,7 +117,7 @@
   const grid = document.getElementById('newsletterGrid');
 
   if (grid) {
-    fetch('dist/posts/posts-data.json')
+    fetch('posts/posts-data.json')
       .then(res => {
         if (!res.ok) throw new Error(res.status);
         return res.json();

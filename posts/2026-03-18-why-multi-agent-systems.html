@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} — Jinsong Liu</title>
+  <meta name="post-title" content="Why Multi-Agent Systems Are the Future of AI Engineering">
+  <meta name="post-date" content="2026-03-18">
+  <meta name="post-summary" content="A deep dive into how LLM agents collaborate through structured tool calling, dynamic routing, and task decomposition — and why this pattern is replacing monolithic prompts.">
+  <meta name="post-tags" content="LLM, Agents, LangGraph, Architecture">
+  <title>Why Multi-Agent Systems Are the Future of AI Engineering — Jinsong Liu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../../style.css">
+  <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
   <style>
-    /* Post-specific styles */
     .post-nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -49,6 +52,8 @@
       padding-bottom: 40px;
       max-width: 720px;
       margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
     }
     .post-header h1 {
       font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -64,7 +69,6 @@
       gap: 12px;
       color: var(--text-tertiary);
       font-size: 0.875rem;
-      margin-bottom: 16px;
     }
     .post-tag {
       font-size: 0.75rem;
@@ -79,41 +83,12 @@
       margin: 0 auto;
       padding: 0 24px 80px;
     }
-    .post-body h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 40px 0 16px;
-      letter-spacing: -0.01em;
-    }
-    .post-body h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 32px 0 12px;
-    }
-    .post-body p {
-      font-size: 1.05rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 20px;
-    }
-    .post-body a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .post-body a:hover { opacity: 0.8; }
-    .post-body img {
-      max-width: 100%;
-      border-radius: var(--radius);
-      margin: 24px 0;
-      border: 1px solid var(--border);
-    }
-    .post-body ul, .post-body ol {
-      margin: 0 0 20px 24px;
-      color: var(--text-secondary);
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
+    .post-body h2 { font-size: 1.5rem; font-weight: 700; margin: 40px 0 16px; }
+    .post-body h3 { font-size: 1.2rem; font-weight: 600; margin: 32px 0 12px; }
+    .post-body p { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+    .post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .post-body img { max-width: 100%; border-radius: var(--radius); margin: 24px 0; border: 1px solid var(--border); }
+    .post-body ul, .post-body ol { margin: 0 0 20px 24px; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
     .post-body li { margin-bottom: 6px; list-style: disc; }
     .post-body ol li { list-style: decimal; }
     .post-body blockquote {
@@ -123,7 +98,6 @@
       background: var(--card-glow);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       color: var(--text-secondary);
-      font-size: 1rem;
     }
     .post-body pre {
       background: var(--code-bg);
@@ -136,10 +110,7 @@
       font-size: 0.875rem;
       line-height: 1.6;
     }
-    .post-body code {
-      font-family: var(--font-mono);
-      font-size: 0.875em;
-    }
+    .post-body code { font-family: var(--font-mono); font-size: 0.875em; }
     .post-body p code, .post-body li code {
       background: var(--code-bg);
       padding: 2px 6px;
@@ -159,13 +130,11 @@
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--accent);
-      transition: opacity 0.2s;
     }
     .post-footer-nav a:hover { opacity: 0.7; }
     @media (max-width: 768px) {
-      .post-header { padding-top: calc(var(--nav-height) + 40px); }
+      .post-header { padding-top: calc(var(--nav-height) + 40px); padding-left: 16px; padding-right: 16px; }
       .post-body { padding: 0 16px 60px; }
-      .post-header { padding-left: 16px; padding-right: 16px; }
     }
   </style>
 </head>
@@ -173,7 +142,7 @@
 
   <nav class="post-nav">
     <div class="post-nav-inner">
-      <a href="../../../index.html" class="post-back">
+      <a href="../index.html" class="post-back">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         Back
       </a>
@@ -196,20 +165,71 @@
     </div>
   </nav>
 
-  <header class="post-header container">
-    <h1>{{TITLE}}</h1>
+  <header class="post-header">
+    <h1>Why Multi-Agent Systems Are the Future of AI Engineering</h1>
     <div class="post-meta">
-      <time>{{DATE}}</time>
-      {{TAGS}}
+      <time>2026-03-18</time>
+      <span class="post-tag">LLM</span>
+      <span class="post-tag">Agents</span>
+      <span class="post-tag">LangGraph</span>
+      <span class="post-tag">Architecture</span>
     </div>
   </header>
 
   <article class="post-body">
-    {{CONTENT}}
+    <h2>The Problem with Single-Agent Architectures</h2>
+    <p>Most LLM applications today follow a simple pattern: one prompt, one model, one response. This works for basic tasks, but falls apart when you need an AI system to handle complex, multi-step workflows that involve:</p>
+    <ul>
+      <li><strong>Tool use</strong> — calling APIs, querying databases, executing code</li>
+      <li><strong>Conditional logic</strong> — different paths based on intermediate results</li>
+      <li><strong>Collaboration</strong> — multiple specialized agents working together</li>
+    </ul>
+    <p>The single-agent approach quickly becomes a tangled mess of prompt engineering hacks.</p>
+
+    <h2>Enter Multi-Agent Systems</h2>
+    <p>Multi-agent architectures solve this by decomposing complex tasks into a graph of specialized agents, each with its own:</p>
+    <ol>
+      <li><strong>System prompt</strong> — focused expertise</li>
+      <li><strong>Tool set</strong> — specific capabilities</li>
+      <li><strong>Routing logic</strong> — when to hand off to another agent</li>
+    </ol>
+    <p>Here's a simplified example using LangGraph:</p>
+    <pre><code class="language-python">from langgraph.graph import StateGraph
+
+graph = StateGraph(AgentState)
+graph.add_node("researcher", research_agent)
+graph.add_node("analyst", analysis_agent)
+graph.add_node("writer", writing_agent)
+
+graph.add_edge("researcher", "analyst")
+graph.add_edge("analyst", "writer")</code></pre>
+    <p>Each node is an independent agent that can use tools, make decisions, and pass structured state to the next agent in the pipeline.</p>
+
+    <h2>Structured Tool Calling</h2>
+    <p>The key enabler is <strong>structured tool calling</strong> — instead of free-form text generation, agents output structured JSON that maps directly to function signatures:</p>
+    <pre><code class="language-json">{
+  "tool": "search_database",
+  "args": {
+    "query": "quarterly revenue trends",
+    "time_range": "2025-Q1 to 2026-Q1"
+  }
+}</code></pre>
+    <p>This eliminates parsing errors and makes the system deterministic where it matters.</p>
+
+    <h2>Key Takeaways</h2>
+    <blockquote><p>The future of AI engineering isn't building smarter models — it's building smarter systems.</p></blockquote>
+    <p>Multi-agent architectures represent a fundamental shift from "prompt engineering" to "system engineering." The best AI engineers in 2026 are the ones who think in graphs, not prompts.</p>
+    <p>If you're building anything beyond a chatbot, consider whether a multi-agent approach might give you:</p>
+    <ul>
+      <li>Better <strong>reliability</strong> through task isolation</li>
+      <li>Better <strong>debuggability</strong> through explicit state passing</li>
+      <li>Better <strong>scalability</strong> through parallel agent execution</li>
+    </ul>
+    <p>The tools are ready. The question is whether you're thinking big enough.</p>
   </article>
 
   <div class="post-footer-nav">
-    <a href="../../../index.html#newsletter">
+    <a href="../index.html#newsletter">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       Back to all posts
     </a>
