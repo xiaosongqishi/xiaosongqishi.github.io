@@ -265,8 +265,19 @@ button {
   padding-top: var(--nav-height);
 }
 
+.page-hero {
+  min-height: 48vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-height);
+}
+
 .hero-content {
   padding: 80px 24px;
+}
+
+.page-hero-content {
+  padding: 56px 24px 40px;
 }
 
 .hero-greeting {
@@ -765,6 +776,26 @@ button {
   background: var(--tag-bg);
   color: var(--tag-text);
   border-radius: 20px;
+}
+
+.page-link-card {
+  max-width: 720px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-link-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.page-link-card p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
 }
 
 /* ============================================================

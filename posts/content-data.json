@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-04-29T16:30:46.254739Z",
+  "total": 1,
+  "published": 1,
+  "posts": 1,
+  "newsletters": 0,
+  "items": [
+    {
+      "slug": "2026-03-18-why-multi-agent-systems",
+      "title": "Why Multi-Agent Systems Are the Future of AI Engineering",
+      "date": "2026-03-18",
+      "summary": "A deep dive into how LLM agents collaborate through structured tool calling, dynamic routing, and task decomposition — and why this pattern is replacing monolithic prompts.",
+      "tags": [
+        "LLM",
+        "Agents",
+        "LangGraph",
+        "Architecture"
+      ],
+      "url": "posts/2026-03-18-why-multi-agent-systems.html",
+      "type": "post",
+      "status": "published",
+      "featured": true
+    }
+  ]
+}

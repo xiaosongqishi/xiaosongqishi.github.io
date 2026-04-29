@@ -37,17 +37,19 @@
   const hamburger = document.getElementById('navHamburger');
   const navLinks = document.getElementById('navLinks');
 
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('open');
-  });
-
-  navLinks.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      navLinks.classList.remove('open');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
     });
-  });
+
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+  }
 
   /* ==========================================================
      Scroll Animations — IntersectionObserver
@@ -76,7 +78,8 @@
      Active Nav Link Highlight on Scroll
      ========================================================== */
   const sections = document.querySelectorAll('section[id], footer[id]');
-  const navItems = document.querySelectorAll('.nav-link');
+  const navItems = Array.from(document.querySelectorAll('.nav-link'))
+    .filter(link => (link.getAttribute('href') || '').startsWith('#'));
 
   function highlightNav() {
     const scrollY = window.scrollY + 100;
@@ -109,15 +112,18 @@
     }
   });
 
-  highlightNav();
+  if (sections.length && navItems.length) {
+    highlightNav();
+  }
 
   /* ==========================================================
      Newsletter — load posts from posts-data.json
      ========================================================== */
-  const grid = document.getElementById('newsletterGrid');
+  function buildPostCards(gridId, sourcePath) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
 
-  if (grid) {
-    fetch('posts/posts-data.json')
+    fetch(sourcePath)
       .then(res => {
         if (!res.ok) throw new Error(res.status);
         return res.json();
@@ -158,7 +164,11 @@
         });
       })
       .catch(() => {
-        /* posts-data.json not found yet — keep the "no posts" message */
+        /* data source not found yet — keep the placeholder message */
       });
   }
+
+  buildPostCards('postsGrid', 'posts/posts-data.json');
+  buildPostCards('newsletterGrid', 'posts/newsletter-data.json');
+  buildPostCards('newsletterPageGrid', 'posts/newsletter-data.json');
 })();
